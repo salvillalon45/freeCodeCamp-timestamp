@@ -1,18 +1,18 @@
 import moment from 'moment';
 
-export function dateFormat(dateInput: string | number) {
-	const momentInstance = moment.utc(dateInput);
-	const unixTimestamp = momentInstance.unix();
-	const utcString =
-		momentInstance.format('ddd, D MMM YYYY HH:mm:ss') + ' GMT';
+export const PORT = 3000;
 
-	return { unixTimestamp, utcString };
+export const mapToObject = (map: Map<string, string | number>) =>
+	Object.fromEntries(map.entries());
+
+export function isDateInputValid(dateInput: string | number | Date) {
+	return moment.utc(dateInput).isValid();
 }
 
-export function getUnixTimestamp(dateInput: string | number) {
+export function getUnixTimestamp(dateInput: string | number | Date) {
 	return moment.utc(dateInput).unix();
 }
 
-export function getUTCString(dateInput: string | number) {
+export function getUTCString(dateInput: string | number | Date) {
 	return moment.utc(dateInput).format('ddd, D MMM YYYY HH:mm:ss') + ' GMT';
 }

@@ -1,41 +1,53 @@
 import express from 'express';
-import { dateFormat } from './utils';
+import {
+	isDateInputValid,
+	getUnixTimestamp,
+	getUTCString,
+	mapToObject,
+	PORT
+} from './utils';
 
 const app = express();
-const port = 3000;
 
-const mapToObject = (map) => Object.fromEntries(map.entries());
-
-app.get('/api/date/:date', function (req, res, next) {
+app.get('/api/date/:date?', function (req, res, next) {
 	const { params } = req;
-	const { date } = params;
-	console.log({ date });
-	console.log('What is date typeof');
-	console.log(typeof date);
-
+	const { date: reqParamsDate } = params;
+	console.log({ reqParamsDate });
+	console.log('What is reqParamsDate typeof');
+	console.log(typeof reqParamsDate);
+	const date = reqParamsDate ?? new Date();
 	const dashIndex = date.indexOf('-');
 	console.log({ dashIndex });
 	let result: Map<string, string | number> = new Map();
 	let unixTimestamp = 0;
 	let utcString = '';
+	let dateInput: string | number | Date = date;
 
 	if (dashIndex >= 0) {
 		console.log('it contains a dash');
-		const { unixTimestamp, utcString } = dateFormat(date);
-		unixTimestamp = unixTimestamp;
-
-		console.log({ result });
-	} else {
+		dateInput = date;
+	} else if (dashIndex <= -1) {
 		console.log('No dash');
-		const [unixTimestamp, utcString] = dateFormat(parseInt(date));
-
-		result.set('unix', unixTimestamp);
-		result.set('utc', utcString);
+		dateInput = parseInt(date);
+	} else {
+		dateInput = new Date();
 	}
-	// const resultObject = mapToObject(result);
-	res.send('hello');
+
+	if (isDateInputValid(dateInput) === false) {
+		console.log('Date is invalid');
+		res.send({ error: 'Invalid Date' });
+		return;
+	}
+
+	utcString = getUTCString(dateInput);
+	unixTimestamp = getUnixTimestamp(dateInput);
+	result.set('unix', unixTimestamp);
+	result.set('utc', utcString);
+
+	const resultObject = mapToObject(result);
+	res.send(resultObject);
 });
 
-app.listen(port, () => {
-	console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+	console.log(`Server is running on port ${PORT}`);
 });
