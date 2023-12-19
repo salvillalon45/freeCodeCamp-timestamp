@@ -2,8 +2,9 @@ import moment from 'moment';
 
 export const PORT = 3000;
 
-export const mapToObject = (map: Map<string, string | number>) =>
-	Object.fromEntries(map.entries());
+export function mapToObject(map: Map<string, string | number>) {
+	return Object.fromEntries(map.entries());
+}
 
 export function isDateInputValid(dateInput: string | number | Date) {
 	return moment.utc(dateInput).isValid();
