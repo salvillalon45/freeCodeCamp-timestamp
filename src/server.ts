@@ -9,7 +9,7 @@ import {
 
 const app = express();
 
-app.get('/api/date/:date?', function (req, res, next) {
+app.get('/api/:date?', function (req, res, next) {
 	console.log('in the route');
 	const { params } = req;
 	const { date: reqParamsDate } = params;
