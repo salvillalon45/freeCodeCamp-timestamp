@@ -6,8 +6,10 @@ import {
 	mapToObject,
 	PORT
 } from './utils';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
 
 app.get('/api/:date?', function (req, res, next) {
 	console.log('in the route');
