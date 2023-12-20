@@ -27,6 +27,12 @@ app.get('/api/:date', function (req, res, next) {
 		dateInput = reqParamsDate;
 	}
 
+	if (isDateInputValid(new Date(dateInput)) === false) {
+		console.log('Invalid date');
+		res.send({ error: 'Invalid Date' });
+		return;
+	}
+
 	const utcString = getUTCString(dateInput);
 	const unixTimestamp = getUnixTimestamp(dateInput);
 	responseObject.set('unix', unixTimestamp);
@@ -45,66 +51,26 @@ app.get('/api', function (req, res) {
 
 	res.send(mapToObject(responseObject));
 });
-// 	console.log('in the route');
-// 	const { params } = req;
-// 	const { date: reqParamsDate } = params;
 
-// 	const result: Map<string, string | number> = new Map();
-// 	let dateInput: string | number | Date;
+// let responseObject = {};
+// app.get('/api/:input', function (req, res) {
+// 	let input: string | number = req.params.input;
 
-// 	if (reqParamsDate === undefined) {
-// 		dateInput = new Date();
+// 	if (input.includes('-') || input.includes(' ')) {
+// 		responseObject['unix'] = new Date(input).getTime();
+// 		responseObject['utc'] = new Date(input).toUTCString();
 // 	} else {
-// 		const checkForDate = Number(reqParamsDate);
-// 		console.log({ checkForDate });
-// 		if (checkForDate) {
-// 			// it is a number
-// 			console.log('It is a number!');
-// 			dateInput = checkForDate;
-// 		} else {
-// 			// it is a string
-// 			console.log('it is a NaN!');
-// 			dateInput = new Date(reqParamsDate);
-// 		}
+// 		input = parseInt(input);
+// 		responseObject['unix'] = new Date(input).getTime();
+// 		responseObject['utc'] = new Date(input).toUTCString();
 // 	}
 
-// 	console.log({ reqParamsDate, dateInput });
-
-// 	if (isDateInputValid(dateInput) === false) {
-// 		console.log('Invalid date');
-// 		res.send({ error: 'Invalid Date' });
-// 		return;
+// 	if (!responseObject['unix'] || !responseObject['utc']) {
+// 		res.json({ error: 'Invalid Date' });
 // 	}
 
-// 	const utcString = getUTCString(dateInput);
-// 	const unixTimestamp = getUnixTimestamp(dateInput);
-// 	result.set('unix', unixTimestamp);
-// 	result.set('utc', utcString);
-
-// 	const resultObject = mapToObject(result);
-// 	console.log({ resultObject });
-// 	res.send(resultObject);
+// 	res.json(responseObject);
 // });
-
-let responseObject = {};
-app.get('/api/:input', function (req, res) {
-	let input: string | number = req.params.input;
-
-	if (input.includes('-') || input.includes(' ')) {
-		responseObject['unix'] = new Date(input).getTime();
-		responseObject['utc'] = new Date(input).toUTCString();
-	} else {
-		input = parseInt(input);
-		responseObject['unix'] = new Date(input).getTime();
-		responseObject['utc'] = new Date(input).toUTCString();
-	}
-
-	if (!responseObject['unix'] || !responseObject['utc']) {
-		res.json({ error: 'Invalid Date' });
-	}
-
-	res.json(responseObject);
-});
 
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
