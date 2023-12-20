@@ -4,8 +4,7 @@ import {
 	getUnixTimestamp,
 	getUTCString,
 	mapToObject,
-	PORT,
-	test
+	PORT
 } from './utils';
 import cors from 'cors';
 
