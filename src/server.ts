@@ -12,7 +12,40 @@ import cors from 'cors';
 const app = express();
 app.use(cors());
 
-// app.get('/api/:date?', function (req, res, next) {
+app.get('/api/:date', function (req, res, next) {
+	const { date: reqParamsDate } = req.params;
+
+	// Check if it is a string
+	const isItNumber = Number(reqParamsDate);
+	const responseObject: Map<string, string | number> = new Map();
+	let dateInput: string | number | Date;
+
+	if (isItNumber) {
+		// it is a number
+		dateInput = isItNumber;
+	} else {
+		// it is a string
+		dateInput = reqParamsDate;
+	}
+
+	const utcString = getUTCString(dateInput);
+	const unixTimestamp = getUnixTimestamp(dateInput);
+	responseObject.set('unix', unixTimestamp);
+	responseObject.set('utc', utcString);
+
+	const resultObject = mapToObject(responseObject);
+	console.log({ resultObject });
+	res.send(resultObject);
+});
+
+app.get('/api', function (req, res) {
+	const responseObject: Map<string, string | number> = new Map();
+
+	responseObject.set('unix', new Date().getTime());
+	responseObject.set('utc', new Date().toUTCString());
+
+	res.send(mapToObject(responseObject));
+});
 // 	console.log('in the route');
 // 	const { params } = req;
 // 	const { date: reqParamsDate } = params;
@@ -70,13 +103,6 @@ app.get('/api/:input', function (req, res) {
 	if (!responseObject['unix'] || !responseObject['utc']) {
 		res.json({ error: 'Invalid Date' });
 	}
-
-	res.json(responseObject);
-});
-
-app.get('/api', function (req, res) {
-	responseObject['unix'] = new Date().getTime();
-	responseObject['utc'] = new Date().toUTCString();
 
 	res.json(responseObject);
 });
