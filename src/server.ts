@@ -4,7 +4,8 @@ import {
 	getUnixTimestamp,
 	getUTCString,
 	mapToObject,
-	PORT
+	PORT,
+	test
 } from './utils';
 import cors from 'cors';
 
@@ -16,28 +17,27 @@ app.get('/api/:date?', function (req, res, next) {
 	const { params } = req;
 	const { date: reqParamsDate } = params;
 
-	const date = reqParamsDate ?? new Date();
-	console.log({ date });
-	let result: Map<string, string | number> = new Map();
+	const date = reqParamsDate;
+	const result: Map<string, string | number> = new Map();
 	let unixTimestamp = 0;
 	let utcString = '';
 	let dateInput: string | number | Date = date;
 
-	if (typeof date === 'string') {
-		console.log('It is type string');
-		const dashIndex = date.indexOf('-');
-		console.log({ dashIndex });
+	if (date === undefined) {
+		dateInput = new Date();
+	} else {
+		const checkForDate = Number(dateInput);
 
-		if (dashIndex >= 0) {
-			// it contains a dash
-			dateInput = date;
-		} else if (dashIndex <= -1) {
-			// No dash
-			dateInput = parseInt(date);
+		if (checkForDate) {
+			// it is a number
+			dateInput = checkForDate;
+		} else {
+			// it is a string
+			dateInput = new Date(date);
 		}
-
-		console.log({ dateInput });
 	}
+
+	console.log({ dateInput });
 
 	if (isDateInputValid(dateInput) === false) {
 		console.log('Invalid date');

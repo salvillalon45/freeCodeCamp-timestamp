@@ -11,10 +11,13 @@ export function isDateInputValid(dateInput: string | number | Date) {
 }
 
 export function getUnixTimestamp(dateInput: string | number | Date) {
-	// return moment.utc(dateInput).unix();
 	return moment.utc(dateInput).valueOf();
 }
 
 export function getUTCString(dateInput: string | number | Date) {
 	return moment.utc(dateInput).format('ddd, D MMM YYYY HH:mm:ss') + ' GMT';
+}
+
+export function test(dateInput: string | number | Date) {
+	console.log(moment.utc(dateInput));
 }
