@@ -27,17 +27,19 @@ app.get('/api/:date?', function (req, res, next) {
 		dateInput = new Date();
 	} else {
 		const checkForDate = Number(dateInput);
-
+		console.log({ checkForDate });
 		if (checkForDate) {
 			// it is a number
+			console.log('It is a number!');
 			dateInput = checkForDate;
 		} else {
 			// it is a string
+			console.log('it is a NaN!');
 			dateInput = new Date(date);
 		}
 	}
 
-	console.log({ dateInput });
+	console.log({ dateInput, date });
 
 	if (isDateInputValid(dateInput) === false) {
 		console.log('Invalid date');
