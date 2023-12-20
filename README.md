@@ -14,6 +14,13 @@ The route params are the following:
 -   The route params can also be invalid date inputs such as a string like this this-is-not-a-date
 -   An empty route parameter should return the current time and date in a JSON object with a unix and utc key
 
+Examples:
+- http://localhost:3000/api/2015-12-25
+- http://localhost:3000/api/1451001600000
+- http://localhost:3000/api/05 October 2011, GMT
+- http://localhost:3000/api/this-is-not-a-date
+- http://localhost:3000/api/
+
 ### Implementation
 
 -   Use momentjs isValid function to check if the dateInput is a valid date
